@@ -1,5 +1,7 @@
 {
   "name": "ionic-memories-app",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "react"
 }
