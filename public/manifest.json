@@ -1,6 +1,6 @@
 {
-  "short_name": "Ionic App",
-  "name": "My Ionic App",
+  "short_name": "React Memories",
+  "name": "Take Pictures and Add Good and Bad Memories",
   "icons": [
     {
       "src": "assets/icon/favicon.png",
@@ -14,8 +14,9 @@
       "purpose": "maskable"
     }
   ],
+
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#ffffff",
+  "theme_color": "#ea0052",
   "background_color": "#ffffff"
 }

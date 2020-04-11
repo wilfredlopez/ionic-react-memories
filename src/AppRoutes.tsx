@@ -7,7 +7,7 @@ import {
   IonTabs,
 } from "@ionic/react"
 import { IonReactRouter } from "@ionic/react-router"
-import { happy, sad } from "ionicons/icons"
+import { happy, sad, informationSharp } from "ionicons/icons"
 import React from "react"
 import { Redirect, Route } from "react-router-dom"
 import { useMemoryContext } from "./context/MemoryContext"
@@ -16,6 +16,7 @@ import GoodMemories from "./pages/GoodMemories"
 // import NewMemories from "./pages/NewMemories"
 
 import LazyComponent from "./LazyComponent"
+import About from "./pages/About"
 
 const NewMemories = React.lazy(() => import("./pages/NewMemories"))
 
@@ -45,6 +46,7 @@ const AppRoutes: React.FC = () => {
             />
             <Route path="/bad-memories" component={BadMemories} exact={true} />
             <Route path="/new-memories" component={NewMemories} exact={true} />
+            <Route path="/about" component={About} exact={true} />
             <Route
               path="/"
               render={() => <Redirect to="/good-memories" />}
@@ -59,6 +61,10 @@ const AppRoutes: React.FC = () => {
             <IonTabButton tab="bad-memories" href="/bad-memories">
               <IonIcon icon={sad} />
               <IonLabel>Bad Memories</IonLabel>
+            </IonTabButton>
+            <IonTabButton tab="about" href="/about">
+              <IonIcon icon={informationSharp} />
+              <IonLabel>About</IonLabel>
             </IonTabButton>
           </IonTabBar>
         </IonTabs>
