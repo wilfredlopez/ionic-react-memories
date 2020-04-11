@@ -25,6 +25,9 @@ const ImagePicker = (props: Props) => {
     filePickerRef.current!.click()
   }, [])
 
+  /**
+   * Takes photo is the camera is available and permissions allowed. if not it triggers the file picker html input.
+   */
   const triggerCamera = useCallback(async () => {
     try {
       await getPhoto({
@@ -45,6 +48,9 @@ const ImagePicker = (props: Props) => {
     }
   }, [getPhoto, getFileWithHtmlInput])
 
+  /**
+   * Sets the takenPhoto state if the photo value changes and calls onImagePicked with the new photo value
+   */
   React.useEffect(() => {
     setTakenPhoto(photo)
     props.onImagePicked(photo)

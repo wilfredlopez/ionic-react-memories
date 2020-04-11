@@ -12,15 +12,35 @@ import { useFilesystem, base64FromPath } from "@ionic/react-hooks/filesystem"
 const { Storage } = Plugins
 interface MemoryContextInterface {
   memories: Memory[]
+  /**
+   *
+   * @param takenPhoto photo taken with Capacitor Camera Plugin. Most have a webPath.
+   * @param title  title of the memory
+   * @param type  'good' | 'bad'
+   */
   addMemory: (takenPhoto: CameraPhoto, title: string, type: MemoryType) => void
+  /**
+   *
+   * @param id id of the memory to be deleted.
+   */
   deleteMemory: (id: string) => Promise<void>
+  /**
+   * Get Memories saved in Storage when app starts
+   */
   initializeContext: () => Promise<void>
 }
 
 const initialMemoryState: MemoryContextInterface = {
   memories: [],
   addMemory: () => {},
+  /**
+   *
+   * @param id id of the memory to be deleted.
+   */
   deleteMemory: (() => {}) as any,
+  /**
+   * Get Memories saved in Storage when app starts
+   */
   initializeContext: (() => {}) as any,
 }
 
@@ -32,6 +52,7 @@ const MemoryContextProvider: React.FC<PropsWithChildren<{}>> = (props) => {
   const [memories, setMemories] = React.useState<Memory[]>([])
   const fileSystem = useFilesystem()
 
+  //Update the storage when memories array changes
   React.useEffect(() => {
     if (availableStorageFeatures.useStorage) {
       const storableMemories: Omit<Memory, "base64String">[] = memories.map(
@@ -48,12 +69,9 @@ const MemoryContextProvider: React.FC<PropsWithChildren<{}>> = (props) => {
     }
   }, [memories])
 
-  //   React.useEffect(() => {
-  //     initializeContext().then((data) => {
-  //       console.log(data)
-  //     })
-  //   }, [])
-
+  /**
+   * Get Memories saved in Storage when app starts
+   */
   const initializeContext = useCallback(async () => {
     const value = await Storage.get({ key: "memories" })
     if (!value || typeof value.value !== "string") {
@@ -86,6 +104,10 @@ const MemoryContextProvider: React.FC<PropsWithChildren<{}>> = (props) => {
     }
   }, [])
 
+  /**
+   *
+   * @param id id of the memory to be deleted.
+   */
   async function deleteMemory(id: string) {
     const index = memories.findIndex((m) => m.id === id)
     if (index === -1) {
@@ -103,6 +125,12 @@ const MemoryContextProvider: React.FC<PropsWithChildren<{}>> = (props) => {
     setMemories(newMemories)
   }
 
+  /**
+   *
+   * @param takenPhoto photo taken with Capacitor Camera Plugin. Most have a webPath.
+   * @param title  title of the memory
+   * @param type  'good' | 'bad'
+   */
   async function addMemory(
     takenPhoto: CameraPhoto,
     title: string,
@@ -126,15 +154,15 @@ const MemoryContextProvider: React.FC<PropsWithChildren<{}>> = (props) => {
 
     setMemories((current) => current.concat(newMemory))
   }
+
+  const context: MemoryContextInterface = {
+    memories,
+    addMemory,
+    initializeContext,
+    deleteMemory,
+  }
   return (
-    <MemoryContext.Provider
-      value={{
-        memories,
-        addMemory,
-        initializeContext,
-        deleteMemory,
-      }}
-    >
+    <MemoryContext.Provider value={context}>
       {props.children}
     </MemoryContext.Provider>
   )

@@ -22,6 +22,7 @@ import React, { useRef, useState } from "react"
 import { useHistory } from "react-router"
 import ImagePicker from "../components/ImagePicker"
 import { useMemoryContext } from "../context/MemoryContext"
+import { MemoryType } from "../context/memory.model"
 
 interface Props {}
 
@@ -31,14 +32,14 @@ interface SelectChangeEventDetail<T> {
 
 const NewMemories = (props: Props) => {
   const [takenPhoto, setTakenPhoto] = useState<CameraPhoto | undefined>()
-  const [memoryType, setMemoryType] = useState<"good" | "bad">("good")
+  const [memoryType, setMemoryType] = useState<MemoryType>("good")
   const [showAlert, setShowAlert] = useState(false)
   const titleInputRef = useRef<HTMLIonInputElement>(null)
   const { addMemory } = useMemoryContext()
   const history = useHistory()
 
   function handleSelectGoodOrBad(
-    event: CustomEvent<SelectChangeEventDetail<"good" | "bad">>,
+    event: CustomEvent<SelectChangeEventDetail<MemoryType>>,
   ) {
     const value = event.detail.value
     if (!value) {
@@ -104,19 +105,26 @@ const NewMemories = (props: Props) => {
                   <IonLabel position="floating">Memory Title</IonLabel>
                   <IonInput ref={titleInputRef} type="text" />
                 </IonItem>
+                <IonItem>
+                  <IonLabel position="floating">Memory Type</IonLabel>
+                  <IonSelect
+                    interfaceOptions={
+                      {
+                        // header: "Memory Type",
+                        // subHeader: "Select your memory type",
+                      }
+                    }
+                    color="primary"
+                    onIonChange={handleSelectGoodOrBad}
+                    value={memoryType}
+                  >
+                    <IonSelectOption value="good">Good Memory</IonSelectOption>
+                    <IonSelectOption value="bad">Bad Memory</IonSelectOption>
+                  </IonSelect>
+                </IonItem>
               </IonCol>
             </IonRow>
-            <IonRow className="ion-text-center">
-              <IonCol>
-                <IonSelect
-                  onIonChange={handleSelectGoodOrBad}
-                  value={memoryType}
-                >
-                  <IonSelectOption value="good">Good Memory</IonSelectOption>
-                  <IonSelectOption value="bad">Bad Memory</IonSelectOption>
-                </IonSelect>
-              </IonCol>
-            </IonRow>
+
             <ImagePicker onImagePicked={(photo) => setTakenPhoto(photo)} />
             <IonRow className="ion-text-center">
               <IonCol>

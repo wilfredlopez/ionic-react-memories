@@ -68,4 +68,4 @@ const MemoriesContent: React.FC<Props> = ({
   )
 }
 
-export default MemoriesContent
+export default React.memo(MemoriesContent)
